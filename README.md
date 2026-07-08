@@ -1,3 +1,151 @@
+# 🌡️ Heat Wave Dynamics in the Benue River Basin (1981–2024)
+### *Spatio-temporal characterization, classification and probabilistic modeling of extreme heat events in Northern Cameroon*
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![R Version](https://img.shields.io/badge/R-%3E%3D4.3-blue.svg)](https://www.r-project.org/)
+[![ERA5 Data](https://img.shields.io/badge/Data-ERA5%20ECMWF-green.svg)](https://cds.climate.copernicus.eu/)
+[![Status](https://img.shields.io/badge/Status-PhD%20Chapter%201%20Complete-brightgreen.svg)]()
+
+---
+
+## 📌 Overview
+
+This repository documents the analytical pipeline for **Chapter 1** of a PhD thesis in
+climatology-epidemiology (Cameroon).
+
+Using **44 years of validated multi-source climate data** (1981–2024), this chapter
+delivers the first comprehensive spatio-temporal characterization of heat waves in the
+**Benue River Basin** (73,232 km², Northern Cameroon) — a Sahelian region housing
+3.5 million people with severely limited healthcare infrastructure.
+
+**Key finding:** Heat wave frequency increased by **+341%** between 1981–2002 and
+2003–2024, driven primarily by the **Atlantic Multidecadal Oscillation**
+(AMO, ρ = +0.581, R² = 25.4%), with ENSO showing no significant influence
+(ρ = −0.037) on extreme temperatures after proper anomaly correction.
+
+---
+
+## 🔬 Scientific Contributions
+
+- **KOUPNA II Classification (2026):** Original 3-tier heat wave severity system
+  (C1 Normal / C2 At-Risk / C3 Dangerous) calibrated on physiological thresholds
+- **Bayesian GEV analysis** (Ratio-of-Uniforms, N = 50,000): Fréchet distribution
+  confirmed (ξ = +0.174, 91.7% posterior) — T₁₀ = 46.0°C, T₅₀ = 48.3°C
+- **Bayesian Markov chains** at annual + daily scales with 14-day probabilistic forecasts
+- **253-pixel ERA5 spatial mapping** → 39 communes scored via composite SH index
+- **Structural breakpoint** 2001–2004 confirmed by Pettitt + Bai-Perron independently
+
+---
+
+## 📂 Repository Structure
+
+```
+benoue-heatwaves-1981-2024/
+├── data/
+│   ├── raw/              # GSOD, GHCNd station data (NOAA)
+│   ├── ERA5/             # NetCDF files — 253 pixels, 0.25° grid
+│   └── processed/        # vagues_avec_classification.rds (N=38 events)
+├── scripts/
+│   ├── Module_01_10/     # Data cleaning & triple-source validation
+│   ├── Module_11_19/     # Detection, classification, trend analysis
+│   ├── Module_20/        # Teleconnections (ENSO, AMO, IOD/DMI)
+│   ├── Module_21/        # External validation (3 stations)
+│   └── Module_22/        # Spatial mapping (ERA5 × HydroSHEDS × GADM)
+├── outputs/
+│   ├── figures/          # Publication-ready figures (300 dpi PNG)
+│   └── tables/           # CSV exports of all result tables
+└── README.md
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Tools & Packages |
+|----------|-----------------|
+| **Language** | R ≥ 4.3 |
+| **Climate data** | ERA5-ECMWF (`ncdf4`, `terra`), GSOD-NOAA, GHCNd-NOAA |
+| **Spatial analysis** | `sf`, `terra`, HydroSHEDS Level 5, GADM v4.1 |
+| **Trend & breakpoint** | `Kendall`, `trend` — Mann-Kendall, Sen, Pettitt, Bai-Perron |
+| **Extreme value** | `revdbayes`, `extRemes` — Bayesian GEV, Ratio-of-Uniforms |
+| **Markov modeling** | `MCMCpack` — Bayesian transition matrices |
+| **Visualization** | `ggplot2`, `ggpubr`, `ggspatial` |
+| **Data wrangling** | `tidyverse`, `lubridate`, `stringr` |
+| **🤖 AI assistance** | R scripts and analytical code were developed with AI as coding partner. All numerical results were systematically verified against raw data files by the author before inclusion in the thesis. |
+
+---
+
+## 📊 Key Results
+
+```
+N heat waves   : 38  (P95 = 38.5°C | WMO 2015)
+Classes        : C1 = 31 (81.6%) | C2 = 6 (15.8%) | C3 = 1 (2.6%)
+Frequency      : 0.32/yr → 1.41/yr  (+341%)
+Breakpoint     : 2001–2004  (p < 0.01, two independent tests)
+MK trends      : τ(HWF) = +0.452*** | τ(J35) = +0.600*** | τ(NT25) = +0.572***
+GEV Bayesian   : μ = 43.62°C | σ = 0.896 | ξ = +0.174 (Fréchet 91.7%)
+Return levels  : T10 = 46.0°C | T50 = 48.3°C [95% CI: 46.5–56.0°C]
+AMO            : ρ = +0.581*** | R² = 25.4% | β = 4.61 waves/°C
+ENSO           : ρ = −0.037 (ns) — non-significant after anomaly correction
+Spatial (ERA5) : Mean τ = +0.493 across 253 pixels | Sen = +0.271°C/decade
+C3 wave 1998   : 87.5% basin coverage | +6.39°C mean anomaly
+```
+
+---
+
+## 📖 Citation
+
+```bibtex
+@phdthesis{KoupnaII2026,
+  author = {Koupna II, Higelin Saint-Clair},
+  title  = {Dynamique spatio-temporelle des vagues de chaleur et complications
+            hypertensives de la grossesse — bassin versant de la Bénoué},
+ year   = {2026}
+}
+```
+
+---
+
+## 🔗 Data Sources
+
+| Source | Usage |
+|--------|-------|
+| [GSOD-NOAA](https://www.ncdc.noaa.gov/cdo-web/) | Primary station data |
+| [GHCNd-NOAA](https://www.ncdc.noaa.gov/ghcnd-data-access) | Quality control |
+| [ERA5-ECMWF](https://cds.climate.copernicus.eu/) | Spatial analysis |
+| [HydroSHEDS L5](https://www.hydrosheds.org/) | Basin delineation |
+| [GADM v4.1](https://gadm.org/) | Administrative boundaries |
+
+---
+
+**Author:** KOUPNA II Higelin Saint-Clair — PhD Candidate.
+| Head of Degrees & Research, University of Garoua (FSEG) | Northern Cameroon
+
+---
+
+---
+
+## 📬 Contact & Collaborations
+
+I am available for **consulting missions, expert assessments and research
+partnerships** in climate-health, early warning systems and climate
+adaptation for Sub-Saharan Africa.
+
+**Areas of expertise:**
+- Extreme heat characterization and classification (Sahelian context)
+- Climate-maternal health linkages (pre-eclampsia, eclampsia)
+- Operational vulnerability mapping for health districts and NGOs
+- Probabilistic forecasting and climate early warning systems
+
+📩 **higeo.saintclair@gmail.com / gabigeo2@yahoo.fr**
+🔗 LinkedIn: www.linkedin.com/in/koupna-ii-higelin-saint-clair-182b7922
+
+
+
+
+
+
+
 # 🌡️ Dynamique des Vagues de Chaleur dans le Bassin Versant de la Bénoué (1981–2024)
 ### *Caractérisation spatio-temporelle, classification et modélisation probabiliste des événements thermiques extrêmes au Nord-Cameroun*
 
